@@ -1,0 +1,18 @@
+{
+  "name": "contactlists",
+  "version": "1.0.0",
+  "description": "a simple meanstalk application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "brij",
+  "license": "ISC",
+  "dependencies": {
+    "@angular/cli": "^1.6.6",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.1"
+  }
+}
