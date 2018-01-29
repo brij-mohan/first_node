@@ -1,0 +1,120 @@
+<div ng-controller="managePostingCtrl">
+  <div class="animated fadeIn" style="padding-right:15px;">
+    <div class="container page-header-div">
+      <h3 class="col-lg-4 col-md-4 col-xs-12 col-sm-4 ">Manage Posting</h3>
+      <div class="inline post-custom-dropdown">
+        <div class=" pull-right p-0 postlistdropdown" uib-dropdown>
+          <select class="btn btn-default dropdown-toggle col-md-8 col-xs-8 col-sm-8 col-lg-8" ng-change="industryVal()" ng-model="industryDetail" ng-options="k as k.name for k in industrytype1">
+            <option value = "">CHOOSE INDUSTRY TYPE</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center" ng-if="postDatas.length==0"><h4>No Post FOund!</h4></div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-repeat="data in postDatas.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) ">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 post-block m-b-30">
+
+          <div class="postlisticon p-t-10" ng-if="userType==='USER' && data.creator._id===currentUserId">
+            <span class="edituser" ng-click="editPostFun(postData,$index);setBuisnessTypes()"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+            <span class="deleteuser p-l-25" ng-click="deletePostConfirm(data._id)"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+          </div>
+          <div class="postlisticon p-t-10" ng-if="userType==='ADMIN'">
+            <span class="edituser" ng-click="editPostFun(postData,$index);setBuisnessTypes()"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+            <span class="deleteuser p-l-25" ng-click="deletePostConfirm(data._id)"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+          </div>
+          <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 m-t-10">
+            <h3 class="post-title">{{data.title}}</h3>
+            <div class="publishby"><span class="industryname">( {{data.industry.name}} )</span> <span class="publish">Published By </span><span ng-if="data.createdBy=='ADMIN'">Admin</span><span ng-if="data.createdBy=='USER'">{{data.creator.name}}</span></div>
+          <div class="post-content">{{data.text}} </div>
+            <div class="hashtags">{{data.hashtags}}</div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 m-t-10" ng-if="data.image">
+            <img ng-src="{{data.image}}" alt="Description" style="height:250px;width:250px" />
+          </div>
+          <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 p-t-80 m-b-20">
+            <span class="postListDate">{{data.createdAt | dateformatter:data.createdAt}}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="paginationdiv" ng-show="postDatas.length > 0">
+      <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="false" rotate="false" num-pages="numPages" items-per-page="itemsPerPage">
+      </pagination>
+    </div>
+
+  </div>
+  <script type="text/ng-template" ng-show="visible" id="editPostData">
+    <div class="ngdialog-message logoutpopo">
+      <div class="ngdialog-header">
+        <p>Edit Post</p>
+      </div>
+      <div class="ngdialog-body">
+        <form enctype="multipart/form-data" name="addPostData">
+          <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <label class="bluelbl">Please select the post content type </label>
+            <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+            <span>
+              <input type="radio" ng-model="postdata.content" value="TEXTANDIMAGE" ng-change='radioposttype("TEXTANDIMAGE")'/> Text And Image
+            </span>
+            <span style="padding:0px 10px 0px 10px;">
+              <input type="radio" ng-model="postdata.content" value="IMAGE" ng-change='radioposttype("IMAGE")'/> Image Only
+            </span>
+            <span>
+              <input type="radio" ng-model="postdata.content" value="TEXT" ng-change='radioposttype("TEXT")'/> Text Only
+            </span>
+            </div>
+
+            <input name="postid" type="hidden" ng-model="postdata._id" class="form-control" />
+            <md-input-container>
+              <label>Post Title</label>
+              <input name="posttitle" type="text" ng-model="postdata.title" ng-change="postEditFn()" class="form-control" required/>
+            </md-input-container>
+            <md-input-container>
+              <label>Post Content</label>
+              <textarea name="postcontent" maxlength=1000 type="text" ng-model="postdata.text" ng-change="postEditFn(postdata.post_id)" class="form-control" required></textarea>
+            </md-input-container>
+          </div>
+          <label class="col-lg-12 col-sm-12 col-xs-12 col-md-12 bluelbl">Industry Type</label>
+          <md-input-container class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+            <select class="form-control dropdwn-icon" ng-model="postdata.industry.name" ng-options="k.name as k.name for k in industrytype1">
+              </select>
+          <input name="industryid" type="hidden" ng-model="postdata.industry._id" class="form-control" />
+          </md-input-container>
+          <label class="col-lg-12 col-sm-12 col-xs-12 col-md-12 bluelbl">Post Type</label>
+          <md-input-container class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+            <select class="form-control dropdwn-icon" ng-model="postdata.postType" ng-options="k.post_type as k.post_type for k in posttype">
+              </select>
+          </md-input-container>
+          <md-input-container class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+            <label>Hashtags</label>
+            <input name="hashtags" type="text" ng-model="postdata.hashtags" ng-change="postEditFn()" class="form-control" required/>
+          </md-input-container>
+          <md-input-container ng-show="removeImageField == true" class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+            <input type="file" class="upload profileUpload" name="postImage" onchange="angular.element(this).scope().uploadFiles(this.files)" id="fileInput" data-button-text="Single" uploader="uploader" accept="image/*" />
+          </md-input-container>
+          <div class="col-lg-12 col-xs-9 col-sm-12 col-md-12 text-center">
+            <button type="submit" class="btn-form btn btn-info" style="clear:both" ng-disabled="hitInProgress" ng-click="updatePost()">Save Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </script>
+  <script type="text/ng-template" ng-show="visible" id="delete_post_modal">
+    <div class="ngdialog-message logoutpopo">
+      <div class="ngdialog-header">
+        <p>Confirmation</p>
+      </div>
+      <div class="ngdialog-body">
+        <p>Are you sure you want to <strong>delete</strong> this post ? </p>
+        <button type="button" ng-click="closeThisDialog('button')" class="btn btn-default pull-left btn-cancel">Cancel
+          </button>
+        <button type="button" ng-click="deletePostData(postDeleteId)" class="btn btn-primary pull-right btn-pop">Delete
+          </button>
+      </div>
+    </div>
+  </script>
+</div>

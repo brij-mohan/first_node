@@ -1,0 +1,37 @@
+<div ng-controller="addIndustryCtrl">
+  <div class="animated fadeIn" style="padding-right:15px;">
+    <div class="container page-header-div">
+      <h3 class="col-lg-6 col-md-6 col-xs-6 col-sm-6">Add Industry Type</h3>
+    </div>
+    <div class="container">
+      <div class="row rightcontentwrapper">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
+          <form enctype="multipart/form-data" name="addIndustry" ng-submit="addIndustry.$submitted&&addIndustryType()">
+            <div class="row">
+              <md-input-container class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                <label>Industry Name</label>
+                <input type="text" class="form-control" name="industryname" ng-model="industrydata.name" required/>
+              </md-input-container>
+              <md-input-container class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                <label>Industry Description</label>
+                <input type="text" class="form-control" name="industrydesc" ng-model="industrydata.desc" />
+              </md-input-container>
+              <md-input-container class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                <label>Business Type</label>
+                <input type="text" class="form-control" name="businesstype" ng-model="industrydata.type" />
+              </md-input-container>
+              <!-- <md-input-container class="col-lg-6 col-xs-6 col-sm-6 col-md-6" ng-repeat = "k in test">
+          <label>Business Type</label>
+          <input name="businesstype" type="text" ng-model="k.businessName"  class="form-control" typeahead = "b as b.business_type_title for b in businessList | filter:$viewValue | limitTo:8" autocomplete="off"/>
+        </md-input-container>
+        <i class="fa fa-plus fa-2" aria-hidden="true" ng-click="addBusinesstype()"></i> -->
+            </div>
+            <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+              <button type="submit" class="btn-form btn btn-primary" ng-disabled="hitInProgress" style="clear:both">Add Industry</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
